@@ -35,7 +35,7 @@ public class Application implements ApplicationRunner, DisposableBean{
 	}
 	
 	public void stop() {
-		//NOTHING TO DO
+		LOGGER.info("Application stopped");
 	}
 
 	@Override
