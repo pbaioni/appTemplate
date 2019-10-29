@@ -2,6 +2,7 @@ package app.main;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -11,7 +12,7 @@ import app.persistence.repo.DummyRepository;
 import app.services.DummyService;
 
 @Service
-public class Application implements ApplicationRunner{
+public class Application implements ApplicationRunner, DisposableBean{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 	
@@ -34,13 +35,18 @@ public class Application implements ApplicationRunner{
 	}
 	
 	public void stop() {
-		
+		//NOTHING TO DO
 	}
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		init();
 		start();
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		stop();
 	}
 
 }
