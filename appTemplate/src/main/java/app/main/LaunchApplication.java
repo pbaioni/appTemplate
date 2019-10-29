@@ -6,9 +6,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @ServletComponentScan
+@PropertySource("classpath:database.properties")
 @SpringBootApplication(scanBasePackages = "app")
 @EnableJpaRepositories("app.persistence.repo")
 @EntityScan("app.persistence.model")
