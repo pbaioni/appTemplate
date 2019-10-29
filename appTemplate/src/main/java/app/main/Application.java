@@ -3,31 +3,34 @@ package app.main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Service;
 
 import app.persistence.repo.DummyRepository;
+import app.services.DummyService;
 
-@Component
-public class Application implements CommandLineRunner{
+@Service
+public class Application implements ApplicationRunner{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 	
 	@Autowired
-	DummyRepository repository;
+	DummyService service;
 	
 	@Autowired
 	ApplicationProperties properties;
 	
 	
 	public void init() {
-		
 		LOGGER.info("App property: " + properties.getAppProperty());
+		LOGGER.info("Application initialized");
 		
 	}
 	
 	public void start() {
-		LOGGER.info("DB content: " + repository.findAll().toString());
+		LOGGER.info("Application started");
+		LOGGER.info("DB content: " + service.findAll().toString());
 	}
 	
 	public void stop() {
@@ -35,7 +38,7 @@ public class Application implements CommandLineRunner{
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(ApplicationArguments args) throws Exception {
 		init();
 		start();
 	}
