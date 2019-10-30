@@ -37,7 +37,7 @@ public class WebController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDo createUser(@RequestBody User user) {
     	//TODO: use a DTO object in the request body
-        UserDo createdUser = userService.create(user);
+        UserDo createdUser = userService.createUser(user);
         return createdUser;
     }
 

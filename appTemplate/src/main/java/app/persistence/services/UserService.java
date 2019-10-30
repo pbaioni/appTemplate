@@ -44,7 +44,7 @@ public class UserService{
 		return repository.findByUserName(userName);
 	}
 
-	public UserDo create(User user) {
+	public UserDo createUser(User user) {
 		return repository.save(new UserDo(user));
 	}
 
