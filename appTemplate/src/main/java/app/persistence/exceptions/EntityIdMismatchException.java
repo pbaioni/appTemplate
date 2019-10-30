@@ -1,4 +1,4 @@
-package app.controllers.web.exceptions;
+package app.persistence.exceptions;
 
 public class EntityIdMismatchException extends RuntimeException {
 
