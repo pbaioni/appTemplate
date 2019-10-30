@@ -21,16 +21,16 @@ public class UsersProperties {
 		return userProperty1;
 	}
 
-	public void setDummyproperty1(String dummyproperty1) {
-		this.userProperty1 = dummyproperty1;
+	public void setDummyproperty1(String userproperty1) {
+		this.userProperty1 = userproperty1;
 	}
 
 	public String getDummyproperty2() {
 		return userProperty2;
 	}
 
-	public void setDummyproperty2(String dummyproperty2) {
-		this.userProperty2 = dummyproperty2;
+	public void setDummyproperty2(String userproperty2) {
+		this.userProperty2 = userproperty2;
 	}
 
 }
