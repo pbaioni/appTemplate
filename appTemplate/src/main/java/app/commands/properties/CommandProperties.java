@@ -5,13 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:commands.properties")
-@ConfigurationProperties(prefix="commands")
-public class CommandsProperties {
+@PropertySource("classpath:command.properties")
+@ConfigurationProperties(prefix="command")
+public class CommandProperties {
 	
 	private boolean start;
 	
-	public CommandsProperties() {
+	public CommandProperties() {
 		
 	}
 

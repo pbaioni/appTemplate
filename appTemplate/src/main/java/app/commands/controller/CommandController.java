@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
-import app.commands.properties.CommandsProperties;
+import app.commands.properties.CommandProperties;
 import app.persistence.model.UserDo;
 import app.persistence.services.UserService;
 import app.web.api.model.User;
@@ -30,7 +30,7 @@ public class CommandController implements CommandLineRunner, DisposableBean {
 	UserService userService;
 
 	@Autowired
-	CommandsProperties properties;
+	CommandProperties properties;
 	
 	boolean runCommands;
 
