@@ -1,4 +1,4 @@
-package app.persistence.model;
+package app.web.api.model;
 
 
 import java.util.Date;
@@ -8,41 +8,23 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import app.web.api.model.User;
-
-
-/** 
- * 	This is a data structure, so
- *  fields can be public. (Clean-Code)
- */
-@Entity
-@Table(name="users")
-public class UserDo {
+public class User {
 	
-    @Id    
-    @Column
     public String userName;
-    @Column
+
     public String password;
-    @Column
+
     public Date lastLogin;
 	
-	public UserDo() {
-		//Default constructor needed for JPA.
+	public User() {
+		//NOTHING TO DO
 	}
 
-	public UserDo(String userName, String password, Date lastLogin) {
+	public User(String userName, String password, Date lastLogin) {
 		super();
 		this.userName = userName;
 		this.password = password;
 		this.lastLogin = lastLogin;
-	}
-
-	public UserDo(User user) {
-		super();
-		this.userName = user.getUserName();
-		this.password = user.getPassword();
-		this.lastLogin = user.getLastLogin();
 	}
 
 	public String getUserName() {
@@ -71,7 +53,7 @@ public class UserDo {
 
 	@Override
 	public String toString() {
-		return "UserDO [userName=" + userName + ", password=" + password + ", lastLogin=" + lastLogin + "]";
+		return "User [userName=" + userName + ", password=" + password + ", lastLogin=" + lastLogin + "]";
 	}
 	
 }

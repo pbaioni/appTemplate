@@ -1,6 +1,5 @@
 package app.persistence.services;
 
-import java.time.Instant;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -12,6 +11,7 @@ import app.persistence.exceptions.EntityNotFoundException;
 import app.persistence.model.UserDo;
 import app.persistence.properties.UsersProperties;
 import app.persistence.repo.UserRepository;
+import app.web.api.model.User;
 
 @Component
 public class UserService{
@@ -44,11 +44,11 @@ public class UserService{
 		return repository.findByUserName(userName);
 	}
 
-	public UserDo create(UserDo user) {
-		return repository.save(user);
+	public UserDo create(User user) {
+		return repository.save(new UserDo(user));
 	}
 
-	public UserDo updateUser(UserDo user) {
+	public UserDo updateUser(User user) {
 		UserDo userToUpdate = repository.findById(user.getUserName()).orElseThrow(EntityNotFoundException::new);
 		userToUpdate.setPassword(user.getPassword());
 		userToUpdate.setLastLogin(user.getLastLogin());

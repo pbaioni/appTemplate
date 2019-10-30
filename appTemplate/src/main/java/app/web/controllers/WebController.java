@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.persistence.exceptions.EntityNotFoundException;
 import app.persistence.model.UserDo;
-import app.persistence.repo.UserRepository;
 import app.persistence.services.UserService;
+import app.web.api.model.User;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/users")
 public class WebController {
 
     @Autowired
@@ -29,25 +28,26 @@ public class WebController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/userName/{userName}")
+    @GetMapping("/{userName}")
     public UserDo getUser(@PathVariable String userName) {
         return userService.getUser(userName);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDo createUser(@RequestBody UserDo user) {
+    public UserDo createUser(@RequestBody User user) {
     	//TODO: use a DTO object in the request body
         UserDo createdUser = userService.create(user);
         return createdUser;
     }
 
-    @PutMapping("/{userName}")
-    public UserDo updateUser(@RequestBody UserDo user) {
+    @PutMapping("/update")
+    public UserDo updateUser(@RequestBody User user) {
+    	//TODO: use a DTO object in the request body
     	return userService.updateUser(user);
     }
     
-    @DeleteMapping("/{userName}")
+    @DeleteMapping("/delete/{userName}")
     public void deleteUser(@PathVariable String userName) {
     	userService.deleteUser(userName);
     }
