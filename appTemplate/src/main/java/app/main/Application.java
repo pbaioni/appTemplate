@@ -38,7 +38,7 @@ public class Application implements ApplicationRunner, DisposableBean{
 		userService.fillDB();
 		LOGGER.info("DB content: " + userService.getAllUsers().toString());
 		instrumentService.init();
-		instrumentService.connectAll();
+		//instrumentService.connectAll();
 		
 	}
 	
