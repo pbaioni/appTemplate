@@ -12,17 +12,17 @@ public class IOStub extends AbstractIO {
 
     @Override
     public void close() throws IOException {
-        throw new IllegalStateException("Input/Output is not available.");
+        //DO NOTHING
     }
 
     @Override
     public InputStream getInputStream() {
-        throw new IllegalStateException("Input/Output is not available.");
+        throw new IllegalStateException("Input stream is not available.");
     }
 
     @Override
     public OutputStream getOutputStream() {
-        throw new IllegalStateException("Input/Output is not available.");
+        throw new IllegalStateException("Output stream is not available.");
     }
 
     @Override
