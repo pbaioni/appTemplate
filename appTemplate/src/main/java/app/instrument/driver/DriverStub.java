@@ -9,7 +9,7 @@ import org.apache.commons.logging.Log;
  *
  * @author TAS
  */
-public class DriverStub extends AbstractDriver implements Driver {
+public class DriverStub extends DriverImpl implements Driver {
 
     private boolean connected;
     
@@ -51,8 +51,4 @@ public class DriverStub extends AbstractDriver implements Driver {
         }
     }
 
-    @Override
-    public final void checkConnectionStatus() throws IOException {
-        //Do nothing
-    }
 }

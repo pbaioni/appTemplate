@@ -7,7 +7,7 @@ import app.instrument.driver.DriverStub;
  *
  * @author pbaioni
  */
-public class SocketInstrumentDriverStub extends DriverStub implements ISocketInstrumentDriver {
+public class SocketInstrumentDriverStub extends DriverStub implements ISocketInstrument {
 
 	public SocketInstrumentDriverStub() {
 		
@@ -16,5 +16,12 @@ public class SocketInstrumentDriverStub extends DriverStub implements ISocketIns
 	public SocketInstrumentDriverStub(String address, int timeout) {
 		super(address, timeout);
 	}
+	
 	//stub specific instrument methods here
+	
+	@Override
+	public String echo(String msg) {
+
+		return "echoing " + msg;
+	}
 }

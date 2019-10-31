@@ -8,18 +8,6 @@ package app.instrument;
 public interface IGenericInstrument {
 
     /**
-     * Connect
-     *
-     * @return true if succeed
-     */
-    public boolean connect();
-
-    /**
-     * Disconnect
-     */
-    public void disconnect();
-
-    /**
      * Gets instrument name
      *
      * @return Instrument name
@@ -39,5 +27,6 @@ public interface IGenericInstrument {
      * @return Instrument status
      */
     public InstrumentStatus getStatus();
+    
 
 }

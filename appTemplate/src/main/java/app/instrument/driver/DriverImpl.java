@@ -10,7 +10,7 @@ import app.instrument.io.IOStub;
  * Abstract driver using a AbstractIO for communicate
  *
  */
-public abstract class AbstractDriver implements Driver {
+public abstract class DriverImpl implements Driver {
 
     private String address;
     
@@ -18,11 +18,13 @@ public abstract class AbstractDriver implements Driver {
     
     private AbstractIO io;
     
-    public AbstractDriver() {
+    private String DELIMITER = "\n";
+    
+    public DriverImpl() {
     	io = new IOStub();
     }
 
-    public AbstractDriver(String address, int timeout) {
+    public DriverImpl(String address, int timeout) {
 		this.address = address;
 		this.timeout = timeout;
 	}
@@ -55,8 +57,22 @@ public abstract class AbstractDriver implements Driver {
     public boolean isConnected() {
         return io != null && io.isConnected();
     }
+    
+	@Override
+	public String read() throws IOException {
+			return io.read(DELIMITER);
+	}
 
-    /**
+	@Override
+	public void send(String cmd) throws IOException {
+		io.write(cmd + DELIMITER);
+	}
+	
+    public void setDELIMITER(String delimiter) {
+		DELIMITER = delimiter;
+	}
+
+	/**
      * Gets IO communicator
      *
      * @return IO communicator

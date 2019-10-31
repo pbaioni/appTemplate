@@ -8,7 +8,10 @@ import app.instrument.driver.Driver;
  *
  * @author pbaioni
  */
-public interface ISocketInstrumentDriver extends Driver {
+public interface ISocketInstrument extends Driver {
 
 	//Add specific instrument methods
+	
+	public String echo(String msg);
+
 }

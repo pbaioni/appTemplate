@@ -1,6 +1,6 @@
 package app.instrument;
 
-import app.instrument.driver.AbstractDriver;
+import app.instrument.driver.DriverImpl;
 import app.instrument.driver.Driver;
 import app.instrument.driver.helper.DriverHelper;
 
@@ -9,12 +9,12 @@ import app.instrument.driver.helper.DriverHelper;
  *
  *@author pbaioni
  */
-public abstract class AbstractInstrument implements IGenericInstrument{
+public abstract class AbstractInstrument extends DriverImpl implements IGenericInstrument{
 
     private String name;
     private String model;
     private InstrumentStatus status;
-    private AbstractDriver driver;
+    private DriverImpl driver;
     
     public AbstractInstrument() {
 
@@ -28,39 +28,35 @@ public abstract class AbstractInstrument implements IGenericInstrument{
     public AbstractInstrument(String address, int timeout, String model) {
 
     	this.model = model;
-        this.status = InstrumentStatus.DISCONNECTED;
+        setStatus(InstrumentStatus.DISCONNECTED);
         this.driver = DriverHelper.getDriverForModel(address, timeout, model);
     }
-
-    public final String getName() {
+    
+    
+    @Override
+    public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    @Override
     public String getModel() {
 		return model;
 	}
 
-	public void setModel(String model) {
-		this.model = model;
-	}
-    
-    public final InstrumentStatus getStatus() {
+	@Override
+    public  InstrumentStatus getStatus() {
         return status;
     }
-    
-    protected void setStatus(InstrumentStatus status) {
+
+    public final void setName(String name) {
+        this.name = name;
+    }
+    private void setStatus(InstrumentStatus status) {
         this.status = status;
     }    
 
-	public AbstractDriver getDriver() {
+	public DriverImpl getDriver() {
 		return driver;
-	}
-	public void setDriver(AbstractDriver driver) {
-		this.driver = driver;
 	}
 	
 	@Override

@@ -45,10 +45,4 @@ public interface Driver {
      */
     void send(String cmd) throws IOException;
 
-    /**
-     * Checks the status/response from the instrument
-     *
-     * @throws IOException If I/O error occurs or the check failed
-     */
-    void checkConnectionStatus() throws IOException;
 }
