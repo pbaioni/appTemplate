@@ -7,10 +7,9 @@ import app.instrument.io.utils.CircularBuffer;
 
 
 /**
- * Flux de lecture dans un "pipe"
+ * Pipe stream reading
  *
- * @author TAS
- * @version 1.00
+ * @author pbaioni
  */
 public class PipeInputStream extends InputStream {
 
@@ -19,13 +18,6 @@ public class PipeInputStream extends InputStream {
     private CircularBuffer bytes;
     private final int timeout;
 
-    /**
-     * Constructeur
-     *
-     * @param pipeSize Taille maximale du buffer en octet
-     * @param timeout temps en milli-secondes pour considérer la fermeture du
-     * flux si aucune donnée n'a été lue. Si 0 alors pas de timeout.
-     */
     public PipeInputStream(int pipeSize, int timeout) {
         super();
         bytes = new CircularBuffer(pipeSize);
@@ -41,11 +33,6 @@ public class PipeInputStream extends InputStream {
         return -1;
     }
 
-    /**
-     * Permet de savoir si le flux est fermé
-     *
-     * @return Vrai si le flux est fermé, sinon faux
-     */
     public boolean isClosed() {
         return bytes == null;
     }
@@ -73,14 +60,6 @@ public class PipeInputStream extends InputStream {
         return -1;
     }
 
-    /**
-     * Ajoute des données dans le buffer de lecture et débloque les lecteurs en
-     * attentent
-     *
-     * @param bytes Données à ajouter
-     * @param offset Index de départ
-     * @param length Nombre d'octets à ajouter
-     */
     synchronized void addBytes(byte[] bytes, int offset, int length) {
         CircularBuffer buffer = this.bytes;
         if (bytes == null || buffer == null) {

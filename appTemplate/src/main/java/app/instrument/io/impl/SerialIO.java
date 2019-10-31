@@ -14,7 +14,7 @@ import jssc.SerialPortTimeoutException;
 /**
  * IO communication with Serial Port
  *
- * @author TAS
+ * @author pbaioni
  */
 public class SerialIO extends AbstractIO {
 

@@ -9,47 +9,32 @@ import app.instrument.io.AbstractIO;
 
 
 /**
- * Miteq DownConverter driver implementation
+ * Socket Instrument driver implementation
  *
  * @author pbaioni
  */
 public class SocketInstrumentDriver extends AbstractDriver implements ISocketInstrumentDriver {
 
 
-    private String password;
-
+    private final static String DELIMITER = "\n";
+    
     public SocketInstrumentDriver() {
+    }
+    
+    public SocketInstrumentDriver(String address, int timeout) {
+    	super(address, timeout);
     }
 
     @Override
     public void connect(AbstractIO io) throws IOException {
         super.connect(io);
-        try {
-            // login
-            String answer = read("?");
-            if (!"PASSWORD".equals(answer)) {
-                throw new IOException("Connection failed. Read: " + answer);
-            }
-
-            send(password);
-            answer = read();
-            if (!"OK".equals(answer)) {
-                throw new IOException("Login failed. Read: " + answer);
-            }
-        } catch (IOException ex) {
-            disconnect();
-            throw ex;
-        } catch (RuntimeException ex) {
-            disconnect();
-            throw ex;
-        }
     }
 
     @Override
     public String read() throws IOException {
         try{
             
-            return read("\r\n");
+            return read(DELIMITER);
             
         } catch(Exception e){
 
@@ -62,7 +47,7 @@ public class SocketInstrumentDriver extends AbstractDriver implements ISocketIns
     public void send(String cmd) throws IOException {
 
         try{
-            getIO().write(cmd + "\r\n");
+            getIO().write(cmd + DELIMITER);
         
         } catch(Exception e){
 
@@ -72,7 +57,7 @@ public class SocketInstrumentDriver extends AbstractDriver implements ISocketIns
     }
 
     @Override
-    public void checkStatus() throws IOException {
+    public void checkConnectionStatus() throws IOException {
     	
     }
 

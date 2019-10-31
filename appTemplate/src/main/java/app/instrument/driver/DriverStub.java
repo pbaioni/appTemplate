@@ -12,9 +12,17 @@ import org.apache.commons.logging.Log;
 public class DriverStub extends AbstractDriver implements Driver {
 
     private boolean connected;
-
+    
+    public DriverStub() {
+    	super();
+	}
+    
+    public DriverStub(String address, int timeout) {
+    	super(address, timeout);
+	}
+    
     @Override
-    public final void connect(String address, int timeout) {
+    public final void connect() {
         connected = true;
     }
 
@@ -33,7 +41,7 @@ public class DriverStub extends AbstractDriver implements Driver {
         if (!isConnected()) {
             throw new IOException("Not connected");
         }
-        return "";
+        return "Stub read";
     }
 
     @Override
@@ -44,7 +52,7 @@ public class DriverStub extends AbstractDriver implements Driver {
     }
 
     @Override
-    public final void checkStatus() throws IOException {
+    public final void checkConnectionStatus() throws IOException {
         //Do nothing
     }
 }

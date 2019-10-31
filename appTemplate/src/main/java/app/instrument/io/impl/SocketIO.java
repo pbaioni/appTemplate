@@ -12,7 +12,7 @@ import app.instrument.io.AbstractIO;
 /**
  * TCP socket
  *
- * @author monpayt
+ * @author pbaioni
  */
 public class SocketIO extends AbstractIO {
 

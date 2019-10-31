@@ -7,6 +7,7 @@ import app.instrument.driver.helper.DriverHelper;
 /**
  * Abstract implementation to communicate with a specific equipment
  *
+ *@author pbaioni
  */
 public abstract class AbstractInstrument implements IGenericInstrument{
 
@@ -24,10 +25,11 @@ public abstract class AbstractInstrument implements IGenericInstrument{
      * @param name Instrument name
      * @param status Default instrument status
      */
-    public AbstractInstrument(String address, int timeout, Driver driver) {
+    public AbstractInstrument(String address, int timeout, String model) {
 
+    	this.model = model;
         this.status = InstrumentStatus.DISCONNECTED;
-        this.driver = DriverHelper.getDriverForModel(model);
+        this.driver = DriverHelper.getDriverForModel(address, timeout, model);
     }
 
     public final String getName() {
@@ -60,9 +62,11 @@ public abstract class AbstractInstrument implements IGenericInstrument{
 	public void setDriver(AbstractDriver driver) {
 		this.driver = driver;
 	}
+	
 	@Override
-    public String toString() {
-        return getName() + "@" + getClass().getSimpleName();
-    }
+	public String toString() {
+		return "AbstractInstrument [name=" + name + ", model=" + model + ", status=" + status + ", driver=" + driver
+				+ "]";
+	}
 
 }

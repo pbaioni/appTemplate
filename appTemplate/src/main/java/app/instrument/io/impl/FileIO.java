@@ -16,7 +16,7 @@ import app.instrument.io.AbstractIO;
 /**
  * File reader
  *
- * @author TAS
+ * @author pbaioni
  */
 public class FileIO extends AbstractIO {
 

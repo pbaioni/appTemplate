@@ -5,19 +5,27 @@ import app.instrument.driver.DriverStub;
 import app.instrument.driver.impl.socketinstrument.SocketInstrumentDriverStub;
 import app.instrument.driver.impl.socketinstrument.SocketInstrumentDriver;
 
+/**
+ * Creates driver from model
+ *
+ * @author pbaioni
+ */
 public class DriverHelper {
 
-	private static final String MITEQ = "Miteq";
-	private static final String DC_STUB = "DcStub";
+	private static final String SOCKET_INSTRUMENT = "SocketInstrument";
+	private static final String SOCKET_INSTRUMENT_STUB = "SocketInstrumentStub";
 
-	public static AbstractDriver getDriverForModel(String model) {
+	public static AbstractDriver getDriverForModel(String address, int timeout, String model) {
 
-		if (model.equals(MITEQ)) {
-			return new SocketInstrumentDriver();
-		} else if(model.equals(DC_STUB)){
-			return new SocketInstrumentDriverStub();
+		switch(model) {
+		case SOCKET_INSTRUMENT:
+			return new SocketInstrumentDriver(address, timeout);
+		case SOCKET_INSTRUMENT_STUB:
+			return new SocketInstrumentDriverStub(address, timeout);
+		default:
+			return new DriverStub();
 		}
-		return new DriverStub();
+
 	}
 
 }

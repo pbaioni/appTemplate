@@ -3,6 +3,7 @@ package app.instrument;
 /**
  * Generic instrument representation
  *
+ *@author pbaioni
  */
 public interface IGenericInstrument {
 

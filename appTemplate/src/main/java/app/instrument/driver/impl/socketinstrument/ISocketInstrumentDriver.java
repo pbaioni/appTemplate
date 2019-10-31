@@ -4,7 +4,7 @@ import app.instrument.driver.Driver;
 
 
 /**
- * Generic DownConverter driver interface
+ * Generic Socket instrument driver interface
  *
  * @author pbaioni
  */

@@ -11,11 +11,9 @@ public interface Driver {
     /**
      * Connects equipment
      *
-     * @param address Address or URI
-     * @param timeout Timeout (in ms) with the equipment
      * @throws IOException if I/O error occurs
      */
-    void connect(String address, int timeout) throws IOException;
+    void connect() throws IOException;
 
     /**
      * Disconnects equipment
@@ -52,5 +50,5 @@ public interface Driver {
      *
      * @throws IOException If I/O error occurs or the check failed
      */
-    void checkStatus() throws IOException;
+    void checkConnectionStatus() throws IOException;
 }

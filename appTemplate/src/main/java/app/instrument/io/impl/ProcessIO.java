@@ -13,8 +13,7 @@ import app.instrument.io.AbstractIO;
 /**
  * Process launcher
  *
- * @author TAS
- * @version 1.00
+ * @author pbaioni
  */
 public class ProcessIO extends AbstractIO {
 

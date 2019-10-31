@@ -9,15 +9,25 @@ import app.instrument.io.IOStub;
 /**
  * Abstract driver using a AbstractIO for communicate
  *
- * @author TAS
- * @version 1.00
  */
 public abstract class AbstractDriver implements Driver {
 
-    private AbstractIO io = new IOStub();
+    private String address;
+    
+    private int timeout;
+    
+    private AbstractIO io;
+    
+    public AbstractDriver() {
+    	io = new IOStub();
+    }
 
+    public AbstractDriver(String address, int timeout) {
+		this.address = address;
+		this.timeout = timeout;
+	}
     @Override
-    public void connect(String address, int timeout) throws IOException {
+    public void connect() throws IOException {
         connect(IOFactory.createIO(address, timeout));
     }
 

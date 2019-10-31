@@ -10,19 +10,14 @@ import app.instrument.io.impl.stream.PipeInputStream;
 import app.instrument.io.impl.stream.PipeOutputStream;
 
 /**
- * IO croisé pour lire ce qui a été envoyé depuis getOutputStream() et envoyer
- * les données qui seront par getInputStream()
+ * Reads the output stream and sends in the InputStream
  *
+ *@author pbaioni
  */
 public class PipeIO extends AbstractIO {
 
-    /**
-     * Flux d'écriture de la connexion
-     */
     private final transient PipeOutputStream output;
-    /**
-     * Flux de l'écrivain (croisé)
-     */
+
     private final transient PipeOutputStream writer;
 
     public PipeIO() throws IOException {
@@ -34,32 +29,15 @@ public class PipeIO extends AbstractIO {
         output = new PipeOutputStream(new PipeInputStream(pipeSize, timeout));
     }
 
-    /**
-     * Output stream pour envoyer des données qui seront depuis getInputStream()
-     *
-     * @return Output stream
-     * @see #getInputStream()
-     */
     public OutputStream getWriter() {
         return writer;
     }
 
-    /**
-     * Input Stream pour lire les données écrites depuis getOutputStream()
-     *
-     * @return Input stream
-     * @see #getOutputStream()
-     */
+
     public InputStream getReader() {
         return output.getInputStream();
     }
 
-    /**
-     * Reads a message from getOutputStream
-     *
-     * @return message read
-     * @throws IOException if an I/O error occurs.
-     */
     public String readOutput() throws IOException {
         int length = getReader().available();
         byte[] ret = new byte[length];
@@ -67,12 +45,6 @@ public class PipeIO extends AbstractIO {
         return new String(ret, 0, length, "UTF-8");
     }
 
-    /**
-     * Sends a message to getInputStream
-     *
-     * @param message Message to send
-     * @throws IOException if an I/O error occurs.
-     */
     public void sendInput(String message) throws IOException {
         byte[] bytes = message.getBytes();
         getWriter().write(bytes, 0, bytes.length);

@@ -9,8 +9,7 @@ import java.io.OutputStream;
  * Abstract class to use and Input/output interface such as TCP socket, UDP
  * datagram or Serial port, etc.
  *
- * @author TAS
- * @see IOFactory How to create a IO class
+ * @author pbaioni
  */
 public abstract class AbstractIO {
 

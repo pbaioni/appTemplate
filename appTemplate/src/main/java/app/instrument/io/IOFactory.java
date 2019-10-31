@@ -15,6 +15,7 @@ import app.instrument.io.impl.SocketIO;
 /**
  * Factory to construct IO object
  *
+ *@author pbaioni
  */
 public class IOFactory {
 

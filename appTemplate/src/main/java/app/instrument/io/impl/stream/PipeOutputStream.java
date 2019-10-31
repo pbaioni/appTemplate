@@ -5,39 +5,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Flux d'écriture dans un "pipe".<br>
- * Permet d'écrire du contenu accessible depuis un
- * {@link PipeInputStream flux de lecture}
+ * Pipe stream writing
  *
- * @author TAS
- * @version 1.00
- * @see PipeInputStream
+ * @author pbaioni
  */
 public class PipeOutputStream extends OutputStream {
 
     private PipeInputStream is;
 
-    /**
-     * Constructeur
-     *
-     * @param is Flux de lecture à associer
-     */
     public PipeOutputStream(PipeInputStream is) {
         super();
         this.is = is;
     }
 
-    /**
-     * @return Flux de lecture associé
-     */
     public InputStream getInputStream() {
         return is;
     }
 
-    /**
-     * @return Nombre d'octets disponible dans le flux de lecture ou retourne -1
-     * si fermé
-     */
     public int available() {
         PipeInputStream is = this.is;
         return (is == null) ? -1 : is.available();
@@ -64,11 +48,6 @@ public class PipeOutputStream extends OutputStream {
         is = null;
     }
 
-    /**
-     * Permet de savoir si le flux est fermé
-     *
-     * @return Vrai si le flux est fermé, sinon faux
-     */
     public boolean isClosed() {
         PipeInputStream is = this.is;
         return is == null || is.isClosed();
