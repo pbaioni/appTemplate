@@ -8,6 +8,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
+import app.instrument.Instrument;
+import app.instrument.service.InstrumentService;
 import app.main.properties.ApplicationProperties;
 import app.persistence.services.UserService;
 
@@ -17,11 +19,13 @@ public class Application implements ApplicationRunner, DisposableBean{
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 	
 	@Autowired
+	ApplicationProperties properties;
+	
+	@Autowired
 	UserService userService;
 	
 	@Autowired
-	ApplicationProperties properties;
-	
+	InstrumentService instrumentService;
 	
 	public void init() {
 		LOGGER.info("App property: " + properties.getAppProperty());
@@ -33,6 +37,9 @@ public class Application implements ApplicationRunner, DisposableBean{
 		LOGGER.info("Application started");
 		userService.fillDB();
 		LOGGER.info("DB content: " + userService.getAllUsers().toString());
+		instrumentService.init();
+		instrumentService.connectAll();
+		
 	}
 	
 	public void stop() {

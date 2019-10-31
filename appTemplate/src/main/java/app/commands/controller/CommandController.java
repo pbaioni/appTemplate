@@ -40,6 +40,7 @@ public class CommandController implements CommandLineRunner, DisposableBean {
 
 	@Override
 	public void run(String... args) throws Exception {
+		LOGGER.info(properties.toString());
 		if (properties.isStart()) {
 			runCommands = true;
 			launchCommands();

@@ -28,17 +28,12 @@ public abstract class DriverImpl implements Driver {
 		this.address = address;
 		this.timeout = timeout;
 	}
+    
     @Override
     public void connect() throws IOException {
         connect(IOFactory.createIO(address, timeout));
     }
 
-    /**
-     * Connects equipment
-     *
-     * @param io AbstractIO to use
-     * @throws IOException if I/O error occurs
-     */
     public void connect(AbstractIO io) throws IOException {
         if (isConnected()) {
             disconnect();
@@ -68,16 +63,22 @@ public abstract class DriverImpl implements Driver {
 		io.write(cmd + DELIMITER);
 	}
 	
+	/* Getters and Setters */
+	
     public void setDELIMITER(String delimiter) {
 		DELIMITER = delimiter;
 	}
+    
+	public String getAddress() {
+		return address;
+	}
 
-	/**
-     * Gets IO communicator
-     *
-     * @return IO communicator
-     */
-    protected AbstractIO getIO() {
-        return io;
-    }
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public AbstractIO getIo() {
+		return io;
+	}
+
 }

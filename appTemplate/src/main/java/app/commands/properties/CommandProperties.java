@@ -23,4 +23,9 @@ public class CommandProperties {
 		this.start = start;
 	}
 
+	@Override
+	public String toString() {
+		return "CommandProperties [start=" + start + "]";
+	}
+
 }

@@ -6,9 +6,9 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource("classpath:users.properties")
-@ConfigurationProperties(prefix="users")
+@ConfigurationProperties
 public class UsersProperties {
-	
+
 	private String userProperty1;
 	
 	private String userProperty2;
@@ -31,6 +31,11 @@ public class UsersProperties {
 
 	public void setDummyproperty2(String userproperty2) {
 		this.userProperty2 = userproperty2;
+	}
+
+	@Override
+	public String toString() {
+		return "UsersProperties [userProperty1=" + userProperty1 + ", userProperty2=" + userProperty2 + "]";
 	}
 
 }

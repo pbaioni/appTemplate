@@ -1,22 +1,21 @@
 package app.instrument;
 
 import app.instrument.driver.DriverImpl;
+import app.instrument.helper.InstrumentHelper;
 import app.instrument.driver.Driver;
-import app.instrument.driver.helper.DriverHelper;
 
 /**
  * Abstract implementation to communicate with a specific equipment
  *
  *@author pbaioni
  */
-public abstract class AbstractInstrument extends DriverImpl implements IGenericInstrument{
+public abstract class Instrument extends DriverImpl implements IInstrument{
 
     private String name;
     private String model;
     private InstrumentStatus status;
-    private DriverImpl driver;
     
-    public AbstractInstrument() {
+    public Instrument() {
 
     }
     /**
@@ -25,11 +24,10 @@ public abstract class AbstractInstrument extends DriverImpl implements IGenericI
      * @param name Instrument name
      * @param status Default instrument status
      */
-    public AbstractInstrument(String address, int timeout, String model) {
-
+    public Instrument(String address, int timeout, String model) {
+        super(address, timeout);
     	this.model = model;
         setStatus(InstrumentStatus.DISCONNECTED);
-        this.driver = DriverHelper.getDriverForModel(address, timeout, model);
     }
     
     
@@ -54,15 +52,10 @@ public abstract class AbstractInstrument extends DriverImpl implements IGenericI
     private void setStatus(InstrumentStatus status) {
         this.status = status;
     }    
-
-	public DriverImpl getDriver() {
-		return driver;
-	}
 	
 	@Override
 	public String toString() {
-		return "AbstractInstrument [name=" + name + ", model=" + model + ", status=" + status + ", driver=" + driver
-				+ "]";
+		return "AbstractInstrument [name=" + name + ", model=" + model + ", status=" + status + "]";
 	}
 
 }

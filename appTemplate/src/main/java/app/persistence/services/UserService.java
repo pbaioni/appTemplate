@@ -5,7 +5,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import app.persistence.exceptions.EntityNotFoundException;
 import app.persistence.model.UserDo;
@@ -13,8 +13,8 @@ import app.persistence.properties.UsersProperties;
 import app.persistence.repo.UserRepository;
 import app.web.api.model.User;
 
-@Component
-public class UserService{
+@Service
+public class UserService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 		
@@ -25,6 +25,8 @@ public class UserService{
 	UsersProperties properties;
 	
 	public void fillDB() {
+		
+		LOGGER.info(properties.toString());
 		Date now = new Date();
 		UserDo paolo = new UserDo("Paolo", "pistache", now);
 		UserDo clemence = new UserDo("Clemence", "pommepoire", now);

@@ -5,7 +5,7 @@ package app.instrument;
  *
  *@author pbaioni
  */
-public interface IGenericInstrument {
+public interface IInstrument {
 
     /**
      * Gets instrument name

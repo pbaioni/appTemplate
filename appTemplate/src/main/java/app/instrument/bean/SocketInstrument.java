@@ -1,29 +1,32 @@
 package app.instrument.bean;
 
-import app.instrument.AbstractInstrument;
+import java.io.IOException;
+
+import app.instrument.Instrument;
 import app.instrument.driver.impl.socketinstrument.ISocketInstrument;
-import app.instrument.driver.impl.socketinstrument.SocketInstrumentDriver;
+import app.instrument.service.InstrumentDefinition;
 
 /**
  * Socket instrument bean
  *
  * @author pbaioni
  */
-public class SocketInstrument extends AbstractInstrument implements ISocketInstrument{
+public class SocketInstrument extends Instrument implements ISocketInstrument{
 
 	public SocketInstrument() {
-		this("DefaultSocketInstrument", "SocketInstrumentStub", "127.0.0.1:8080", 5000);
+		this(new InstrumentDefinition("DefaultSocketInstrument", "SocketInstrumentStub", "127.0.0.1:8080", 5000));
 
 	}
 
-	public SocketInstrument(String name, String model, String address, int timeout) {
-		super(address, timeout, model);
-		this.setName(name);
+	public SocketInstrument(InstrumentDefinition def) {
+		super(def.getAddress(), def.getTimeout(), def.getModel());
+		this.setName(def.getName());
 	}
 
 	@Override
-	public String echo(String msg) {
-		return ((SocketInstrumentDriver) getDriver()).echo(msg);
+	public String echo(String msg) throws IOException {
+			send("echoing " + msg);
+			return read();
 	}
 
 }
