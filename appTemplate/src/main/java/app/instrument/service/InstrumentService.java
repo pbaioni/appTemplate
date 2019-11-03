@@ -1,6 +1,7 @@
 package app.instrument.service;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.instrument.Instrument;
-import app.instrument.bean.SocketInstrument;
 import app.instrument.helper.InstrumentHelper;
 
 @Service
 public class InstrumentService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstrumentService.class);
-	
+
 	@Autowired
 	InstrumentsDefinitions instrumentsDefinition;
 
@@ -28,14 +28,16 @@ public class InstrumentService {
 	}
 
 	public void init() {
-		
-		InstrumentDefinition def1 = new InstrumentDefinition("client1", "SocketInstrument", "127.0.0.1:9001", 5000);
+
+		InstrumentDefinition def1 = new InstrumentDefinition("client1", "SocketInstrument", "127.0.0.1:10001", 5000);
 		instruments.add(InstrumentHelper.getBeanForModel(def1));
-		InstrumentDefinition def2 = new InstrumentDefinition("client2", "SocketInstrument", "127.0.0.1:9002", 5000);
+		LOGGER.info("Instrument init done");
+		InstrumentDefinition def2 = new InstrumentDefinition("client2", "SocketInstrument", "127.0.0.1:10002", 5000);
 		instruments.add(InstrumentHelper.getBeanForModel(def2));
 	}
 
 	public void connectAll() {
+		LOGGER.info("Connecting all instruments");
 		for (Instrument i : instruments) {
 			connect(i);
 		}
@@ -58,6 +60,7 @@ public class InstrumentService {
 	private void connect(Instrument i) {
 		try {
 			i.connect();
+			LOGGER.info("Instrument " + i.getName() + " connected to " + i.getAddress());
 		} catch (IOException e) {
 			LOGGER.error("Impossible to connect " + i.getName() + "@" + i.getAddress(), e);
 		}
@@ -65,7 +68,10 @@ public class InstrumentService {
 
 	private void disconnect(Instrument i) {
 		try {
-			i.disconnect();
+			if (i.isConnected()) {
+				i.disconnect();
+				LOGGER.info("Instrument " + i.getName() + " disconnected from " + i.getAddress());
+			}
 		} catch (IOException e) {
 			LOGGER.error("Problem while disconnecting " + i.getName(), e);
 		}

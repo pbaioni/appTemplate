@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import app.instrument.Instrument;
 import app.instrument.service.InstrumentService;
+import app.instrument.service.ServerService;
 import app.main.properties.ApplicationProperties;
 import app.persistence.services.UserService;
 
@@ -27,18 +28,26 @@ public class Application implements ApplicationRunner, DisposableBean{
 	@Autowired
 	InstrumentService instrumentService;
 	
+	@Autowired
+	ServerService serverService;
+	
 	public void init() {
 		LOGGER.info("App property: " + properties.getAppProperty());
 		LOGGER.info("Application initialized");
+		userService.fillDB();
 		
 	}
 	
 	public void start() {
 		LOGGER.info("Application started");
-		userService.fillDB();
+
 		LOGGER.info("DB content: " + userService.getAllUsers().toString());
+		
+		serverService.init();
+		serverService.startServers();
+		
 		instrumentService.init();
-		//instrumentService.connectAll();
+		instrumentService.connectAll();
 		
 	}
 	
@@ -54,6 +63,7 @@ public class Application implements ApplicationRunner, DisposableBean{
 
 	@Override
 	public void destroy() throws Exception {
+		instrumentService.disconnectAll();
 		stop();
 	}
 
