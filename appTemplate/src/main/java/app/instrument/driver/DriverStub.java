@@ -3,6 +3,10 @@ package app.instrument.driver;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import app.main.Application;
 
 /**
  * Default stub for telecom driver
@@ -10,6 +14,8 @@ import org.apache.commons.logging.Log;
  * @author TAS
  */
 public class DriverStub extends DriverImpl implements Driver {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DriverStub.class);
 
     private boolean connected;
     
@@ -37,9 +43,9 @@ public class DriverStub extends DriverImpl implements Driver {
     }
 
     @Override
-    public String read() throws IOException {
+    public String read() {
         if (!isConnected()) {
-            throw new IOException("Not connected");
+            LOGGER.error("Impossible to read from stub driver");
         }
         return "Stub read";
     }

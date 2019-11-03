@@ -1,5 +1,7 @@
 package app.main;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -9,6 +11,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
 import app.instrument.Instrument;
+import app.instrument.bean.SocketInstrument;
 import app.instrument.service.InstrumentService;
 import app.instrument.service.ServerService;
 import app.main.properties.ApplicationProperties;
@@ -48,6 +51,13 @@ public class Application implements ApplicationRunner, DisposableBean{
 		
 		instrumentService.init();
 		instrumentService.connectAll();
+		
+		try {
+			((SocketInstrument) instrumentService.getInstrumentByName("client1")).echo("test");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

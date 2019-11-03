@@ -1,6 +1,10 @@
 package app.instrument.driver;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.instrument.io.AbstractIO;
 import app.instrument.io.IOFactory;
@@ -12,63 +16,74 @@ import app.instrument.io.IOStub;
  */
 public abstract class DriverImpl implements Driver {
 
-    private String address;
-    
-    private int timeout;
-    
-    private AbstractIO io;
-    
-    private String DELIMITER = "\n";
-    
-    public DriverImpl() {
-    	io = new IOStub();
-    }
+	private static final Logger LOGGER = LoggerFactory.getLogger(DriverImpl.class);
 
-    public DriverImpl(String address, int timeout) {
+	private String address;
+
+	private int timeout;
+
+	private AbstractIO io;
+
+	private String DELIMITER = "\n";
+
+	public DriverImpl() {
+		io = new IOStub();
+	}
+
+	public DriverImpl(String address, int timeout) {
 		this.address = address;
 		this.timeout = timeout;
 	}
-    
-    @Override
-    public void connect() throws IOException {
-        connect(IOFactory.createIO(address, timeout));
-    }
 
-    public void connect(AbstractIO io) throws IOException {
-        if (isConnected()) {
-            disconnect();
-        }
-        this.io = io;
-    }
-
-    @Override
-    public void disconnect() throws IOException {
-        if (io != null) {
-            io.close();
-        }
-    }
-
-    @Override
-    public boolean isConnected() {
-        return io != null && io.isConnected();
-    }
-    
 	@Override
-	public String read() throws IOException {
-			return io.read(DELIMITER);
+	public void connect() throws IOException {
+		connect(IOFactory.createIO(address, timeout));
+	}
+
+	public void connect(AbstractIO io) throws IOException {
+		if (isConnected()) {
+			disconnect();
+		}
+		this.io = io;
+	}
+
+	@Override
+	public void disconnect() throws IOException {
+		if (io != null) {
+			io.close();
+		}
+	}
+
+	@Override
+	public boolean isConnected() {
+		return io != null && io.isConnected();
+	}
+
+	@Override
+	public String read() {
+		try {
+		LOGGER.info("Reading...");
+		return io.read(DELIMITER);
+		} catch(SocketTimeoutException ste) {
+			LOGGER.error("Reading timeout from " + this.address);
+		} catch(IOException e) {
+			LOGGER.error("IO exception from " + this.address, e);
+		}
+		return "";
 	}
 
 	@Override
 	public void send(String cmd) throws IOException {
+		LOGGER.info("Sending: " + cmd);
 		io.write(cmd + DELIMITER);
 	}
-	
+
 	/* Getters and Setters */
-	
-    public void setDELIMITER(String delimiter) {
+
+	public void setDELIMITER(String delimiter) {
 		DELIMITER = delimiter;
 	}
-    
+
 	public String getAddress() {
 		return address;
 	}
