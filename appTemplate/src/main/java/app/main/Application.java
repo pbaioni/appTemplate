@@ -53,7 +53,13 @@ public class Application implements ApplicationRunner, DisposableBean{
 		instrumentService.connectAll();
 		
 		try {
-			LOGGER.info(((SocketInstrument) instrumentService.getInstrumentByName("client1")).echo("test"));
+			Instrument i =instrumentService.getInstrumentByName("client1");
+			i.sendAndRead("hello");
+			
+			//i.sendAndRead("broadcast");
+
+			((SocketInstrument)i).echo("test");
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -61,6 +67,7 @@ public class Application implements ApplicationRunner, DisposableBean{
 	}
 	
 	public void stop() {
+		instrumentService.disconnectAll();
 		LOGGER.info("Application stopped");
 	}
 
@@ -72,7 +79,6 @@ public class Application implements ApplicationRunner, DisposableBean{
 
 	@Override
 	public void destroy() throws Exception {
-		instrumentService.disconnectAll();
 		stop();
 	}
 

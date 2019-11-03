@@ -25,8 +25,8 @@ public class SocketInstrument extends Instrument implements ISocketInstrument{
 
 	@Override
 	public String echo(String msg) throws IOException {
-			send("echoing " + msg);
-			return read();
+
+			return sendAndRead("echoing " + msg);
 	}
 
 }

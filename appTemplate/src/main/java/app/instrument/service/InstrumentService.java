@@ -31,9 +31,11 @@ public class InstrumentService {
 
 		InstrumentDefinition def1 = new InstrumentDefinition("client1", "SocketInstrument", "127.0.0.1:10001", 5000);
 		instruments.add(InstrumentHelper.getBeanForModel(def1));
+
+//		InstrumentDefinition def2 = new InstrumentDefinition("client2", "SocketInstrument", "127.0.0.1:10002", 5000);
+//		instruments.add(InstrumentHelper.getBeanForModel(def2));
+		
 		LOGGER.info("Instrument init done");
-		InstrumentDefinition def2 = new InstrumentDefinition("client2", "SocketInstrument", "127.0.0.1:10002", 5000);
-		instruments.add(InstrumentHelper.getBeanForModel(def2));
 	}
 
 	public void connectAll() {

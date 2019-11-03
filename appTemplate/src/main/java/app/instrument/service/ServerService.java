@@ -18,33 +18,29 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
+import app.instrument.server.InstrumentServer;
+
 @Service
 public class ServerService implements CommandLineRunner, DisposableBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerService.class);
 
-	ServerSocket server1;
-	ServerSocket server2;
+	InstrumentServer server1;
+	InstrumentServer server2;
 
-	List<ServerSocket> serverList;
-	
-	List<Thread> serverThreads;
-
-	private boolean started;
+	List<InstrumentServer> serverList;
 
 	public ServerService() {
-		serverList = new ArrayList<ServerSocket>();
-		serverThreads = new ArrayList<Thread>();
-		started = false;
+		serverList = new ArrayList<InstrumentServer>();
 	}
 
 	public void init() {
 		try {
 			InetAddress address = InetAddress.getByName("localhost");
-			server1 = new ServerSocket(10001, 10, address);
-			server2 = new ServerSocket(10002, 10, address);
+			server1 = new InstrumentServer("Server1", address, 10001, 10);
+			//server2 = new InstrumentServer("Server2", address, 10002, 10);
 			serverList.add(server1);
-			serverList.add(server2);
+			//serverList.add(server2);
 
 
 		} catch (IOException e) {
@@ -54,57 +50,18 @@ public class ServerService implements CommandLineRunner, DisposableBean {
 	}
 
 	public void startServers() {
-		for (ServerSocket server : serverList) {
-			
-			Thread t = new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						Socket client = server.accept();
-						InputStream input = client.getInputStream();
-						OutputStream output = client.getOutputStream();
-						BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-		                PrintWriter writer = new PrintWriter(output, true);
-		                String response = "Server is alive";
-		                
-						while(true) {
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							String line = reader.readLine();
-							LOGGER.info("Server received: " + line);
-							LOGGER.info("Server sending >>> " + response);
-							writer.println(response);
-							writer.flush();
-						
-						}
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					
-				}
-			});
-			
-			serverThreads.add(t);
-			t.start();
-			LOGGER.info("Server listeneing on " + server.getInetAddress().toString() + ":" + server.getLocalPort());
-
+		for (InstrumentServer server : serverList) {
+			server.open();
+			LOGGER.info(server.getServerName() + " is listeneing on " + server.getServerSocket().getInetAddress().toString() + ":" + server.getServerSocket().getLocalPort());
 		}
-		
-		started = true;
-
 	}
 
 	public void closeServers() {
-		for (ServerSocket server : serverList) {
-			if (!server.isClosed()) {
+		for (InstrumentServer server : serverList) {
+			if (!server.getServerSocket().isClosed()) {
 				try {
-					server.close();
+					server.getServerSocket().close();
+					LOGGER.info(server.getServerName() + " has been shutdown");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -112,9 +69,6 @@ public class ServerService implements CommandLineRunner, DisposableBean {
 		}
 	}
 
-	public boolean isStarted() {
-		return started;
-	}
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -123,13 +77,6 @@ public class ServerService implements CommandLineRunner, DisposableBean {
 
 	@Override
 	public void destroy() throws Exception {
-		closeServers();
-		LOGGER.info("Servers closed");
-		for(Thread t : serverThreads) {
-			t.interrupt();
-		}
-		
-		LOGGER.info("Threads interrupted");
 
 	}
 

@@ -68,6 +68,16 @@ public abstract class Instrument extends DriverImpl implements IInstrument{
 		LOGGER.info(this.name + " is sending >>> " + cmd);
 		super.send(cmd);
 	}
+	
+	public String sendAndRead(String cmd) {
+		try {
+			send(cmd);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return read();
+	}
 
     public final void setName(String name) {
         this.name = name;
