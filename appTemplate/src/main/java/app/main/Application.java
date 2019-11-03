@@ -53,9 +53,8 @@ public class Application implements ApplicationRunner, DisposableBean{
 		instrumentService.connectAll();
 		
 		try {
-			((SocketInstrument) instrumentService.getInstrumentByName("client1")).echo("test");
+			LOGGER.info(((SocketInstrument) instrumentService.getInstrumentByName("client1")).echo("test"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

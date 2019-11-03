@@ -2,6 +2,13 @@ package app.instrument;
 
 import app.instrument.driver.DriverImpl;
 import app.instrument.helper.InstrumentHelper;
+
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import app.instrument.driver.Driver;
 
 /**
@@ -11,6 +18,8 @@ import app.instrument.driver.Driver;
  */
 public abstract class Instrument extends DriverImpl implements IInstrument{
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(Instrument.class);
+	
     private String name;
     private String model;
     private InstrumentStatus status;
@@ -45,6 +54,20 @@ public abstract class Instrument extends DriverImpl implements IInstrument{
     public  InstrumentStatus getStatus() {
         return status;
     }
+	
+	@Override
+	public String read() {
+		
+		String response = super.read();
+		LOGGER.info(this.name + " has received: " + response);
+		return response;
+	}
+
+	@Override
+	public void send(String cmd) throws IOException {
+		LOGGER.info(this.name + " is sending >>> " + cmd);
+		super.send(cmd);
+	}
 
     public final void setName(String name) {
         this.name = name;

@@ -62,7 +62,6 @@ public abstract class DriverImpl implements Driver {
 	@Override
 	public String read() {
 		try {
-		LOGGER.info("Reading...");
 		return io.read(DELIMITER);
 		} catch(SocketTimeoutException ste) {
 			LOGGER.error("Reading timeout from " + this.address);
@@ -74,7 +73,6 @@ public abstract class DriverImpl implements Driver {
 
 	@Override
 	public void send(String cmd) throws IOException {
-		LOGGER.info("Sending: " + cmd);
 		io.write(cmd + DELIMITER);
 	}
 

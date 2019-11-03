@@ -1,8 +1,14 @@
 package app.instrument.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +61,28 @@ public class ServerService implements CommandLineRunner, DisposableBean {
 				@Override
 				public void run() {
 					try {
-						server.accept();
+						Socket client = server.accept();
+						InputStream input = client.getInputStream();
+						OutputStream output = client.getOutputStream();
+						BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		                PrintWriter writer = new PrintWriter(output, true);
+		                String response = "Server is alive";
+		                
+						while(true) {
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							String line = reader.readLine();
+							LOGGER.info("Server received: " + line);
+							LOGGER.info("Server sending >>> " + response);
+							writer.println(response);
+							writer.flush();
+						
+						}
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
