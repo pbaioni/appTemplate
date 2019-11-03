@@ -18,9 +18,13 @@ public class InstrumentServer {
 
 	private ServerSocket serverSocket;
 	
+	private Thread serverThread;
+	
 	private boolean isRunning = true;
 	
 	private List<ClientProcessor> processors;
+	
+	private List<Thread> clientThreads;
 
 	public InstrumentServer() {
 
@@ -31,6 +35,8 @@ public class InstrumentServer {
 		this.serverName = name;
 		
 		processors = new ArrayList<ClientProcessor>();
+		
+		clientThreads = new ArrayList<Thread>();
 
 		try {
 			this.serverSocket = new ServerSocket(port, maxConnections, address);
@@ -43,7 +49,7 @@ public class InstrumentServer {
 	public void open() {
 
 		// Toujours dans un thread à part vu qu'il est dans une boucle infinie
-		Thread t = new Thread(new Runnable() {
+		serverThread = new Thread(new Runnable() {
 			public void run() {
 				while (isRunning == true) {
 
@@ -54,28 +60,35 @@ public class InstrumentServer {
 						processors.add(clientProcessor);
 						LOGGER.info("Server " + serverName + " has received a new client connection, [activeConnections=" + processors.size() + "]");
 
-						Thread t = new Thread(clientProcessor);
-						t.start();
+						Thread processorThread = new Thread(clientProcessor);
+						clientThreads.add(processorThread);
+						processorThread.start();
 
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
-
-				try {
-					serverSocket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-					serverSocket = null;
-				}
 			}
 		});
 
-		t.start();
+		serverThread.start();
+		
 	}
 
 	public void close() {
-		isRunning = false;
+		
+		for (ClientProcessor processor : processors) {
+			processor.close();
+		}
+		
+		for(Thread clientThread : clientThreads) {
+			clientThread.interrupt();
+		}
+		
+		serverThread.interrupt();
+		
+		LOGGER.info("Server " + serverName + " has been shut down");
+
 	}
 	
 	private InstrumentServer getServer() {

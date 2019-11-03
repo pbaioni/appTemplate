@@ -68,6 +68,7 @@ public class Application implements ApplicationRunner, DisposableBean{
 	
 	public void stop() {
 		instrumentService.disconnectAll();
+		serverService.closeServers();
 		LOGGER.info("Application stopped");
 	}
 

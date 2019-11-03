@@ -1,14 +1,7 @@
 package app.instrument.service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +14,7 @@ import org.springframework.stereotype.Service;
 import app.instrument.server.InstrumentServer;
 
 @Service
-public class ServerService implements CommandLineRunner, DisposableBean {
+public class ServerService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerService.class);
 
@@ -58,26 +51,8 @@ public class ServerService implements CommandLineRunner, DisposableBean {
 
 	public void closeServers() {
 		for (InstrumentServer server : serverList) {
-			if (!server.getServerSocket().isClosed()) {
-				try {
-					server.getServerSocket().close();
-					LOGGER.info(server.getServerName() + " has been shutdown");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			server.close();
 		}
-	}
-
-
-	@Override
-	public void run(String... args) throws Exception {
-
-	}
-
-	@Override
-	public void destroy() throws Exception {
-
 	}
 
 }
