@@ -2,6 +2,7 @@ package app.instrument.server;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,13 +18,13 @@ public class InstrumentServer {
 	private String serverName;
 
 	private ServerSocket serverSocket;
-	
+
 	private Thread serverThread;
-	
+
 	private boolean isRunning = true;
-	
+
 	private List<ClientProcessor> processors;
-	
+
 	private List<Thread> clientThreads;
 
 	public InstrumentServer() {
@@ -33,9 +34,9 @@ public class InstrumentServer {
 	public InstrumentServer(String name, InetAddress address, int port, int maxConnections) {
 
 		this.serverName = name;
-		
+
 		processors = new ArrayList<ClientProcessor>();
-		
+
 		clientThreads = new ArrayList<Thread>();
 
 		try {
@@ -58,7 +59,12 @@ public class InstrumentServer {
 						Socket client = serverSocket.accept();
 						ClientProcessor clientProcessor = new ClientProcessor(client, getServer());
 						processors.add(clientProcessor);
-						LOGGER.info("Server " + serverName + " has received a new client connection, [activeConnections=" + processors.size() + "]");
+						InetSocketAddress remote = (InetSocketAddress) client.getRemoteSocketAddress();
+
+						// command reception log
+						String origin = remote.getAddress().getHostAddress() + ":" + remote.getPort();
+						LOGGER.info("Server " + serverName + " has received a new client connection from " + origin
+								+ ", [activeConnections=" + processors.size() + "]");
 
 						Thread processorThread = new Thread(clientProcessor);
 						clientThreads.add(processorThread);
@@ -72,32 +78,35 @@ public class InstrumentServer {
 		});
 
 		serverThread.start();
-		
+
 	}
 
 	public void close() {
-		
+
 		for (ClientProcessor processor : processors) {
 			processor.close();
 		}
-		
-		for(Thread clientThread : clientThreads) {
+
+		for (Thread clientThread : clientThreads) {
 			clientThread.interrupt();
 		}
-		
+
 		serverThread.interrupt();
-		
+
 		LOGGER.info("Server " + serverName + " has been shut down");
 
 	}
-	
+
 	private InstrumentServer getServer() {
 		return this;
 	}
-	
-	public void broadcast(String msg) {
+
+	public void broadcast(String msg, String origin) {
+		LOGGER.info("Server " + serverName + " is braodcasting >>> " + msg);
 		for (ClientProcessor processor : processors) {
-			processor.send(msg);
+			if (!processor.getOrigin().equals(origin)) {
+				processor.send(msg);
+			}
 		}
 	}
 

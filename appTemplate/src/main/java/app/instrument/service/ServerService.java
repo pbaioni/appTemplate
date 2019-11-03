@@ -31,9 +31,9 @@ public class ServerService {
 		try {
 			InetAddress address = InetAddress.getByName("localhost");
 			server1 = new InstrumentServer("Server1", address, 10001, 10);
-			//server2 = new InstrumentServer("Server2", address, 10002, 10);
+			server2 = new InstrumentServer("Server2", address, 10002, 10);
 			serverList.add(server1);
-			//serverList.add(server2);
+			serverList.add(server2);
 
 
 		} catch (IOException e) {
@@ -53,6 +53,7 @@ public class ServerService {
 		for (InstrumentServer server : serverList) {
 			server.close();
 		}
+		LOGGER.info("All servers have been stopped");
 	}
 
 }

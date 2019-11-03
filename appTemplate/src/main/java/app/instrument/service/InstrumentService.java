@@ -32,8 +32,11 @@ public class InstrumentService {
 		InstrumentDefinition def1 = new InstrumentDefinition("client1", "SocketInstrument", "127.0.0.1:10001", 5000);
 		instruments.add(InstrumentHelper.getBeanForModel(def1));
 
-//		InstrumentDefinition def2 = new InstrumentDefinition("client2", "SocketInstrument", "127.0.0.1:10002", 5000);
-//		instruments.add(InstrumentHelper.getBeanForModel(def2));
+		InstrumentDefinition def2 = new InstrumentDefinition("client2", "SocketInstrument", "127.0.0.1:10001", 5000);
+		instruments.add(InstrumentHelper.getBeanForModel(def2));
+		
+		InstrumentDefinition def3 = new InstrumentDefinition("client3", "SocketInstrument", "127.0.0.1:10001", 5000);
+		instruments.add(InstrumentHelper.getBeanForModel(def3));
 		
 		LOGGER.info("Instrument init done");
 	}
@@ -49,6 +52,7 @@ public class InstrumentService {
 		for (Instrument i : instruments) {
 			disconnect(i);
 		}
+		LOGGER.info("All Instruments have been disconnected");
 	}
 
 	public void connect(String instrumentName) {

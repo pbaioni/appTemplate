@@ -1,6 +1,8 @@
 package app.main;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,12 +55,25 @@ public class Application implements ApplicationRunner, DisposableBean{
 		instrumentService.connectAll();
 		
 		try {
-			Instrument i =instrumentService.getInstrumentByName("client1");
-			i.sendAndRead("hello");
+			List<Instrument> instruments = instrumentService.getInstruments();
+			Instrument i1 =instrumentService.getInstrumentByName("client1");
+			Instrument i2 =instrumentService.getInstrumentByName("client2");
+			Instrument i3 =instrumentService.getInstrumentByName("client3");
 			
-			//i.sendAndRead("broadcast");
+			for(Instrument i : instruments) {
+				i.sendAndRead("hello");
+				((SocketInstrument)i).echo("test");
+			}
 
-			((SocketInstrument)i).echo("test");
+			
+			i1.send("broadcast message for all!");
+			for(Instrument i : instruments) {
+				if(!i.equals(i1)) {
+					i.read();
+				}
+			}
+			
+			i1.sendAndRead("hello");
 
 		} catch (IOException e) {
 			e.printStackTrace();
