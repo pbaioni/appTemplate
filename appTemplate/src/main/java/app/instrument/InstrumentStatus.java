@@ -3,6 +3,7 @@ package app.instrument;
 /**
  * List of status
  *
+ *@author pbaioni
  */
 public enum InstrumentStatus {
 

@@ -1,7 +1,7 @@
 package app.instrument;
 
 /**
- * Generic instrument representation
+ * Generic instrument interface
  *
  *@author pbaioni
  */

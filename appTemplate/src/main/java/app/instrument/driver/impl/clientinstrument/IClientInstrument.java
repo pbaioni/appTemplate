@@ -6,7 +6,7 @@ import app.instrument.driver.Driver;
 
 
 /**
- * Generic Socket instrument driver interface
+ * Generic Client instrument driver interface
  *
  * @author pbaioni
  */

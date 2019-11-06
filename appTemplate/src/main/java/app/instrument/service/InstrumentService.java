@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import app.instrument.Instrument;
 import app.instrument.helper.InstrumentHelper;
 
+/**
+ * Instrument Service
+ *
+ * @author pbaioni
+ */
 @Service
 public class InstrumentService {
 

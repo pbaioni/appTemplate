@@ -21,6 +21,11 @@ import org.slf4j.LoggerFactory;
 import app.persistence.model.UserDo;
 import app.web.api.model.User;
 
+/**
+ * Client processor
+ *
+ * @author pbaioni
+ */
 public class ClientProcessor implements Runnable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientProcessor.class);

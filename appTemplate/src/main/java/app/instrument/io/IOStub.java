@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * IO stub
  *
  * @author pbaioni
  */

@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import app.main.Application;
 
 /**
- * Default stub for telecom driver
+ * Default stub for driver
  *
- * @author TAS
+ * @author pbaioni
  */
 public class DriverStub extends DriverImpl implements Driver {
 	

@@ -3,8 +3,9 @@ package app.instrument.driver;
 import java.io.IOException;
 
 /**
- * Driver implementation to communicate with equipment
+ * Driver implementation to communicate with server equipment
  *
+ * @author pbaioni
  */
 public interface Driver {
 

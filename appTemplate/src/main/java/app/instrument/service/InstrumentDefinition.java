@@ -1,8 +1,10 @@
 package app.instrument.service;
 
-import org.springframework.stereotype.Component;
-
-@Component
+/**
+ * Instrument definition
+ *
+ * @author pbaioni
+ */
 public class InstrumentDefinition {
 	
 	private String name;

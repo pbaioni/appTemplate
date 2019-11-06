@@ -7,7 +7,7 @@ import app.instrument.driver.impl.clientinstrument.IClientInstrument;
 import app.instrument.service.InstrumentDefinition;
 
 /**
- * Socket instrument bean
+ * Client instrument bean
  *
  * @author pbaioni
  */

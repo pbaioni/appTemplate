@@ -13,6 +13,7 @@ import app.instrument.io.IOStub;
 /**
  * Abstract driver using a AbstractIO for communicate
  *
+ *@author pbaioni
  */
 public abstract class DriverImpl implements Driver {
 
