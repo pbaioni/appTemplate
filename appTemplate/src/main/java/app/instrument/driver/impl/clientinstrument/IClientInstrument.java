@@ -1,4 +1,4 @@
-package app.instrument.driver.impl.socketinstrument;
+package app.instrument.driver.impl.clientinstrument;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import app.instrument.driver.Driver;
  *
  * @author pbaioni
  */
-public interface ISocketInstrument extends Driver {
+public interface IClientInstrument extends Driver {
 
 	//Add specific instrument methods
 	

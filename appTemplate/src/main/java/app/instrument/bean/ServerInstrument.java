@@ -1,4 +1,4 @@
-package app.instrument.server;
+package app.instrument.bean;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -11,9 +11,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class InstrumentServer {
+public class ServerInstrument {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(InstrumentServer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerInstrument.class);
 
 	private String serverName;
 
@@ -25,19 +25,19 @@ public class InstrumentServer {
 
 	private List<ClientProcessor> processors;
 
-	private List<Thread> clientThreads;
+	//private List<Thread> clientThreads;
 
-	public InstrumentServer() {
+	public ServerInstrument() {
 
 	}
 
-	public InstrumentServer(String name, InetAddress address, int port, int maxConnections) {
+	public ServerInstrument(String name, InetAddress address, int port, int maxConnections) {
 
 		this.serverName = name;
 
 		processors = new ArrayList<ClientProcessor>();
 
-		clientThreads = new ArrayList<Thread>();
+		//clientThreads = new ArrayList<Thread>();
 
 		try {
 			this.serverSocket = new ServerSocket(port, maxConnections, address);
@@ -47,17 +47,17 @@ public class InstrumentServer {
 
 	}
 
-	public void open() {
+	public void start() {
 
-		// Toujours dans un thread à part vu qu'il est dans une boucle infinie
+		// one thread per server
 		serverThread = new Thread(new Runnable() {
 			public void run() {
 				while (isRunning == true) {
 
 					try {
-						// On attend une connexion d'un client
+						// waiting for client connection
 						Socket client = serverSocket.accept();
-						ClientProcessor clientProcessor = new ClientProcessor(client, getServer());
+						ClientProcessor clientProcessor = new ClientProcessor(client);
 						processors.add(clientProcessor);
 						InetSocketAddress remote = (InetSocketAddress) client.getRemoteSocketAddress();
 
@@ -66,8 +66,9 @@ public class InstrumentServer {
 						LOGGER.info("Server " + serverName + " has received a new client connection from " + origin
 								+ ", [activeConnections=" + processors.size() + "]");
 
+						//one thread per client
 						Thread processorThread = new Thread(clientProcessor);
-						clientThreads.add(processorThread);
+						//clientThreads.add(processorThread);
 						processorThread.start();
 
 					} catch (IOException e) {
@@ -87,9 +88,9 @@ public class InstrumentServer {
 			processor.close();
 		}
 
-		for (Thread clientThread : clientThreads) {
-			clientThread.interrupt();
-		}
+//		for (Thread clientThread : clientThreads) {
+//			clientThread.interrupt();
+//		}
 
 		serverThread.interrupt();
 
@@ -97,7 +98,7 @@ public class InstrumentServer {
 
 	}
 
-	private InstrumentServer getServer() {
+	private ServerInstrument getServer() {
 		return this;
 	}
 

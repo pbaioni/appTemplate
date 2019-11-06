@@ -1,7 +1,7 @@
 package app.instrument.helper;
 
 import app.instrument.Instrument;
-import app.instrument.bean.SocketInstrument;
+import app.instrument.bean.ClientInstrument;
 import app.instrument.service.InstrumentDefinition;
 
 /**
@@ -18,7 +18,7 @@ public class InstrumentHelper {
 
 		switch(definition.getModel()) {
 		case SOCKET_INSTRUMENT:
-			return new SocketInstrument(definition);
+			return new ClientInstrument(definition);
 		case SIMULATED_SOCKET_INSTRUMENT:
 			return null;
 		default:

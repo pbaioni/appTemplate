@@ -1,4 +1,4 @@
-package app.instrument.server;
+package app.instrument.bean;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,15 +26,13 @@ public class ClientProcessor implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientProcessor.class);
 
 	private Socket clientSocket;
-	private InstrumentServer server;
 	private PrintWriter writer = null;
 	private BufferedReader reader = null;
 	private boolean isRunning = true;
 	private String origin;
 
-	public ClientProcessor(Socket pSock, InstrumentServer server) {
+	public ClientProcessor(Socket pSock) {
 		clientSocket = pSock;
-		this.server = server;
 		InetSocketAddress remote = (InetSocketAddress) clientSocket.getRemoteSocketAddress();
 		origin = remote.getAddress().getHostAddress() + ":" + remote.getPort();
 	}
@@ -45,7 +43,6 @@ public class ClientProcessor implements Runnable {
 		try {
 			// getting client socket io
 			reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
 			writer = new PrintWriter(clientSocket.getOutputStream());
 		} catch (IOException e) {
 			LOGGER.error("Error while getting client socket IO", e);
@@ -59,7 +56,7 @@ public class ClientProcessor implements Runnable {
 			if (!Objects.isNull(commandLine)) {
 
 				// command reception log
-				LOGGER.info(server.getServerName() + " has received " + commandLine + " from: " + origin);
+				LOGGER.info("Server has received " + commandLine + " from: " + origin);
 
 				try {
 					manageCommands(commandLine);
@@ -92,17 +89,12 @@ public class ClientProcessor implements Runnable {
 
 			scanner.close();
 
-			// System.out.println("cmd: " + command + ", arg: " + argument);
-
 			// treating command
 			String response = "";
 
 			switch (command.toUpperCase()) {
 			case "HELLO":
 				response = "Hello, client!";
-				break;
-			case "BROADCAST":
-				server.broadcast(allArguments.trim(), origin);
 				break;
 			case "ECHOING":
 				response = allArguments.trim();

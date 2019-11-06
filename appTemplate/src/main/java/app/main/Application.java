@@ -13,7 +13,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
 import app.instrument.Instrument;
-import app.instrument.bean.SocketInstrument;
+import app.instrument.bean.ClientInstrument;
 import app.instrument.service.InstrumentService;
 import app.instrument.service.ServerService;
 import app.main.properties.ApplicationProperties;
@@ -37,44 +37,41 @@ public class Application implements ApplicationRunner, DisposableBean{
 	ServerService serverService;
 	
 	public void init() {
+		//app property example
 		LOGGER.info("App property: " + properties.getAppProperty());
-		LOGGER.info("Application initialized");
+
+		//initializing services
 		userService.fillDB();
+		serverService.init();
+		instrumentService.init();
+		
+		LOGGER.info("Application initialized");
 		
 	}
 	
 	public void start() {
-		LOGGER.info("Application started");
 
+		//printing users DB content
 		LOGGER.info("DB content: " + userService.getAllUsers().toString());
 		
-		serverService.init();
+		//starting servers
 		serverService.startServers();
 		
-		instrumentService.init();
+		//connecting instruments
 		instrumentService.connectAll();
 		
+		LOGGER.info("Application started");
+		
+		//sending and receiving some messages
 		try {
 			List<Instrument> instruments = instrumentService.getInstruments();
-			Instrument i1 =instrumentService.getInstrumentByName("client1");
-			Instrument i2 =instrumentService.getInstrumentByName("client2");
-			Instrument i3 =instrumentService.getInstrumentByName("client3");
 			
 			for(Instrument i : instruments) {
+				//using instrument method
 				i.sendAndRead("hello");
-				((SocketInstrument)i).echo("test");
+				//using specific method
+				((ClientInstrument)i).echo("test");
 			}
-
-			
-			i1.send("broadcast message for all!");
-			for(Instrument i : instruments) {
-				if(!i.equals(i1)) {
-					i.read();
-				}
-			}
-			
-			i1.sendAndRead("hello");
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

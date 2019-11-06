@@ -3,7 +3,7 @@ package app.instrument.bean;
 import java.io.IOException;
 
 import app.instrument.Instrument;
-import app.instrument.driver.impl.socketinstrument.ISocketInstrument;
+import app.instrument.driver.impl.clientinstrument.IClientInstrument;
 import app.instrument.service.InstrumentDefinition;
 
 /**
@@ -11,14 +11,14 @@ import app.instrument.service.InstrumentDefinition;
  *
  * @author pbaioni
  */
-public class SocketInstrument extends Instrument implements ISocketInstrument{
+public class ClientInstrument extends Instrument implements IClientInstrument{
 
-	public SocketInstrument() {
+	public ClientInstrument() {
 		this(new InstrumentDefinition("DefaultSocketInstrument", "SocketInstrumentStub", "127.0.0.1:8080", 5000));
 
 	}
 
-	public SocketInstrument(InstrumentDefinition def) {
+	public ClientInstrument(InstrumentDefinition def) {
 		super(def.getAddress(), def.getTimeout(), def.getModel());
 		this.setName(def.getName());
 	}

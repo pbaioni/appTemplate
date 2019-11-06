@@ -18,9 +18,6 @@ public class InstrumentService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstrumentService.class);
 
-	@Autowired
-	InstrumentDefinitions instrumentsDefinition;
-
 	List<Instrument> instruments;
 
 	public InstrumentService() {
@@ -28,9 +25,8 @@ public class InstrumentService {
 	}
 
 	public void init() {
-		
-		LOGGER.info(instrumentsDefinition.toString());
 
+		//TODO: create instruments from configuration file
 		InstrumentDefinition def1 = new InstrumentDefinition("client1", "SocketInstrument", "127.0.0.1:10001", 5000);
 		instruments.add(InstrumentHelper.getBeanForModel(def1));
 

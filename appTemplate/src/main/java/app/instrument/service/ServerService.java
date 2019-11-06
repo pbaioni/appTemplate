@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
-import app.instrument.server.InstrumentServer;
+import app.instrument.bean.ServerInstrument;
 
 @Service
 public class ServerService {
@@ -20,21 +20,21 @@ public class ServerService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerService.class);
 	
 
-	InstrumentServer server1;
-	InstrumentServer server2;
+	ServerInstrument server1;
+	ServerInstrument server2;
 
-	List<InstrumentServer> serverList;
+	List<ServerInstrument> serverList;
 
 	public ServerService() {
-		serverList = new ArrayList<InstrumentServer>();
+		serverList = new ArrayList<ServerInstrument>();
 	}
 
 	public void init() {
 		try {
-			
+			//TODO: create servers from configuration file
 			InetAddress address = InetAddress.getByName("localhost");
-			server1 = new InstrumentServer("Server1", address, 10001, 10);
-			server2 = new InstrumentServer("Server2", address, 10002, 10);
+			server1 = new ServerInstrument("Server1", address, 10001, 10);
+			server2 = new ServerInstrument("Server2", address, 10002, 10);
 			serverList.add(server1);
 			serverList.add(server2);
 
@@ -46,15 +46,15 @@ public class ServerService {
 	}
 
 	public void startServers() {
-		for (InstrumentServer server : serverList) {
-			server.open();
+		for (ServerInstrument server : serverList) {
+			server.start();
 			LOGGER.info(server.getServerName() + " is listeneing on " + server.getServerSocket().getInetAddress().toString() + ":" + server.getServerSocket().getLocalPort());
 		}
 	}
 
 	public void closeServers() {
 		LOGGER.info("Closing servers");
-		for (InstrumentServer server : serverList) {
+		for (ServerInstrument server : serverList) {
 			server.close();
 		}
 		LOGGER.info("All servers have been stopped");
