@@ -82,6 +82,7 @@ public class Application implements ApplicationRunner, DisposableBean{
 	}
 	
 	public void stop() {
+		LOGGER.info("Stopping Application");
 		instrumentService.disconnectAll();
 		serverService.closeServers();
 		LOGGER.info("Application stopped");
@@ -95,6 +96,7 @@ public class Application implements ApplicationRunner, DisposableBean{
 
 	@Override
 	public void destroy() throws Exception {
+		LOGGER.info("Destroying Application");
 		stop();
 	}
 

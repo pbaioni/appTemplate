@@ -53,6 +53,7 @@ public class ServerService {
 	}
 
 	public void closeServers() {
+		LOGGER.info("Closing servers");
 		for (InstrumentServer server : serverList) {
 			server.close();
 		}

@@ -146,12 +146,14 @@ public class ClientProcessor implements Runnable {
 	}
 
 	public void close() {
+		LOGGER.info("Closing processor " + getOrigin());
 		isRunning = false;
 		try {
+			LOGGER.info("Closing streams for " + getOrigin());
 			reader.close();
 			writer.close();
 			if (clientSocket.isConnected()) {
-
+				LOGGER.info("Closing client socket for " + getOrigin());
 				clientSocket.close();
 			}
 		} catch (IOException e) {
