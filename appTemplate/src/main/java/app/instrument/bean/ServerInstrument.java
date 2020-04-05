@@ -91,6 +91,7 @@ public class ServerInstrument {
 		serverIsListeningForConnections = false;
 
 		//closing all the processors for connected clients
+		LOGGER.info("Closing all client processors for " + serverName);
 		for (ClientProcessor processor : clientProcessors) {
 			processor.close();
 		}

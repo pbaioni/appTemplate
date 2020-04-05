@@ -58,7 +58,7 @@ public class ServerService {
 	}
 
 	public void closeServers() {
-		LOGGER.info("Closing servers");
+		LOGGER.info("Closing servers...");
 		for (ServerInstrument server : serverList) {
 			server.close();
 		}

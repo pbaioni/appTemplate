@@ -75,24 +75,23 @@ public class ClientProcessor implements Runnable {
 	}
 	
 	public void close() {
-		LOGGER.info("Closing client processor " + getOrigin());
-		
+	
 		//breaking the input reading loop
 		ClientIsWaitingForInput = false;
 		
 		//closing I/O
 		try {
-			LOGGER.info("Closing streams for client " + getOrigin());
 			reader.close();
 			writer.close();
 			//closing client socket
 			if (clientSocket.isConnected()) {
-				LOGGER.info("Closing client socket for client " + getOrigin());
 				clientSocket.close();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		LOGGER.info("Client processor " + getOrigin() + " closed");
 	}
 
 	private void manageCommands(String commandLine) throws Exception {

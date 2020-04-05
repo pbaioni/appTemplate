@@ -52,6 +52,7 @@ public class InstrumentService {
 	}
 
 	public void disconnectAll() {
+		LOGGER.info("Disconnecting all instruments...");
 		for (Instrument i : instruments) {
 			disconnect(i);
 		}
