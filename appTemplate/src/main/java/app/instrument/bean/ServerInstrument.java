@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +25,9 @@ public class ServerInstrument {
 
 	private ServerSocket serverSocket;
 
-	private Thread serverThread;
+	private boolean serverIsListeningForConnections = true;
 
-	private boolean isRunning = true;
-
-	private List<ClientProcessor> processors;
-
-	//private List<Thread> clientThreads;
+	private List<ClientProcessor> clientProcessors;
 
 	public ServerInstrument() {
 
@@ -40,9 +37,7 @@ public class ServerInstrument {
 
 		this.serverName = name;
 
-		processors = new ArrayList<ClientProcessor>();
-
-		//clientThreads = new ArrayList<Thread>();
+		clientProcessors = new ArrayList<ClientProcessor>();
 
 		try {
 			this.serverSocket = new ServerSocket(port, maxConnections, address);
@@ -55,30 +50,33 @@ public class ServerInstrument {
 	public void start() {
 
 		// one thread per server
-		serverThread = new Thread(new Runnable() {
+		Thread serverThread = new Thread(new Runnable() {
 			public void run() {
-				while (isRunning == true) {
+				while (serverIsListeningForConnections) {
 
 					try {
 						// waiting for client connection
 						Socket client = serverSocket.accept();
+
 						ClientProcessor clientProcessor = new ClientProcessor(client);
-						processors.add(clientProcessor);
+						clientProcessors.add(clientProcessor);
 						InetSocketAddress remote = (InetSocketAddress) client.getRemoteSocketAddress();
 
 						// command reception log
 						String origin = remote.getAddress().getHostAddress() + ":" + remote.getPort();
 						LOGGER.info("Server " + serverName + " has received a new client connection from " + origin
-								+ ", [activeConnections=" + processors.size() + "]");
+								+ ", [activeConnections=" + clientProcessors.size() + "]");
 
-						//one thread per client
+						// one thread per client
 						Thread processorThread = new Thread(clientProcessor);
-						//clientThreads.add(processorThread);
 						processorThread.start();
 
+					} catch (SocketException e) {
+						LOGGER.error("Socket is closed for " + serverName);
 					} catch (IOException e) {
-						e.printStackTrace();
+						LOGGER.error(e.getMessage());
 					}
+
 				}
 			}
 		});
@@ -89,27 +87,28 @@ public class ServerInstrument {
 
 	public void close() {
 
-		for (ClientProcessor processor : processors) {
+		//breaking loop for client connection waiting
+		serverIsListeningForConnections = false;
+
+		//closing all the processors for connected clients
+		for (ClientProcessor processor : clientProcessors) {
 			processor.close();
 		}
 
-//		for (Thread clientThread : clientThreads) {
-//			clientThread.interrupt();
-//		}
-
-		serverThread.interrupt();
+		//closing the server socket
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage());
+		}
 
 		LOGGER.info("Server " + serverName + " has been shut down");
 
 	}
 
-	private ServerInstrument getServer() {
-		return this;
-	}
-
 	public void broadcast(String msg, String origin) {
 		LOGGER.info("Server " + serverName + " is braodcasting >>> " + msg);
-		for (ClientProcessor processor : processors) {
+		for (ClientProcessor processor : clientProcessors) {
 			if (!processor.getOrigin().equals(origin)) {
 				processor.send(msg);
 			}

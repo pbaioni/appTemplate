@@ -33,7 +33,7 @@ public class ClientProcessor implements Runnable {
 	private Socket clientSocket;
 	private PrintWriter writer = null;
 	private BufferedReader reader = null;
-	private boolean isRunning = true;
+	private boolean ClientIsWaitingForInput = true;
 	private String origin;
 
 	public ClientProcessor(Socket pSock) {
@@ -53,8 +53,8 @@ public class ClientProcessor implements Runnable {
 			LOGGER.error("Error while getting client socket IO", e);
 		}
 
-		while (isRunning) {
-
+		while (ClientIsWaitingForInput) {
+			
 			// waiting for a message from client
 			String commandLine = read();
 
@@ -72,6 +72,27 @@ public class ClientProcessor implements Runnable {
 
 		}
 
+	}
+	
+	public void close() {
+		LOGGER.info("Closing client processor " + getOrigin());
+		
+		//breaking the input reading loop
+		ClientIsWaitingForInput = false;
+		
+		//closing I/O
+		try {
+			LOGGER.info("Closing streams for client " + getOrigin());
+			reader.close();
+			writer.close();
+			//closing client socket
+			if (clientSocket.isConnected()) {
+				LOGGER.info("Closing client socket for client " + getOrigin());
+				clientSocket.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void manageCommands(String commandLine) throws Exception {
@@ -94,7 +115,7 @@ public class ClientProcessor implements Runnable {
 
 			scanner.close();
 
-			// treating command
+			// processing command
 			String response = "";
 
 			switch (command.toUpperCase()) {
@@ -140,22 +161,6 @@ public class ClientProcessor implements Runnable {
 
 	public String getOrigin() {
 		return origin;
-	}
-
-	public void close() {
-		LOGGER.info("Closing processor " + getOrigin());
-		isRunning = false;
-		try {
-			LOGGER.info("Closing streams for " + getOrigin());
-			reader.close();
-			writer.close();
-			if (clientSocket.isConnected()) {
-				LOGGER.info("Closing client socket for " + getOrigin());
-				clientSocket.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
